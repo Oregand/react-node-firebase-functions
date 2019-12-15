@@ -11,26 +11,34 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
  response.send("Hello from world!");
 });
 
-exports.getScreams = functions.https.onRequest((request, response) => {
-    admin.firestore().collection('screams').get()
+app.get(`/screams`, (request, response) => {
+    admin
+    .firestore()
+    .collection('screams')
+    .orderBy('createdAt', `desc`)
+    .get()
     .then((data) => {
         let screams = []
         data.forEach(doc => {
-            screams.push(doc.data())
+            screams.push({
+                screamId: doc.id,
+                bdoy: doc.data().body,
+                userHandle: doc.data().userHandle,
+                createdAt: doc.data().createdAts
+            })
         });
         return response.json(screams);
     })
     .catch(err => console.error(err));
 });
 
-exports.createScream = functions.https.onRequest((request, response) => {
-
+app.post(`/scream`, (request, response) => {
     if(request.method !== 'POST') return response.status(400).json({ error: 'Method now allowed' });
 
     const newScream = {
         body: request.body,
         user: request.body.userHandle,
-        createdAt: admin.firestore().Timestamp.fromDate(new Date())
+        createdAt: new Date().toISOString()
     }
 
     admin
