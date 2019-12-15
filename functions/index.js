@@ -24,6 +24,9 @@ exports.getScreams = functions.https.onRequest((request, response) => {
 });
 
 exports.createScream = functions.https.onRequest((request, response) => {
+
+    if(request.method !== 'POST') return response.status(400).json({ error: 'Method now allowed' });
+
     const newScream = {
         body: request.body,
         user: request.body.userHandle,
