@@ -52,7 +52,7 @@ exports.postOneScream = (req, res) => {
       });
   };
 
-  // Fetch one scream
+// Fetch one scream
 exports.getScream = (req, res) => {
     let screamData = {};
     db.doc(`/screams/${req.params.screamId}`)
@@ -82,7 +82,7 @@ exports.getScream = (req, res) => {
       });
   };
 
-  // Comment on a comment
+// Comment on a comment
 exports.commentOnScream = (req, res) => {
     if (req.body.body.trim() === '')
       return res.status(400).json({ comment: 'Must not be empty' });
@@ -116,7 +116,7 @@ exports.commentOnScream = (req, res) => {
       });
   };
 
-  // Like a scream
+// Like a scream
 exports.likeScream = (req, res) => {
     const likeDocument = db
       .collection('likes')
@@ -164,7 +164,7 @@ exports.likeScream = (req, res) => {
       });
   };
 
-  exports.unlikeScream = (req, res) => {
+exports.unlikeScream = (req, res) => {
     const likeDocument = db
       .collection('likes')
       .where('userHandle', '==', req.user.handle)
@@ -208,7 +208,7 @@ exports.likeScream = (req, res) => {
       });
   };
 
-  // Delete a scream
+// Delete a scream
 exports.deleteScream = (req, res) => {
     const document = db.doc(`/screams/${req.params.screamId}`);
     document
