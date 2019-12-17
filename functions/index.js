@@ -73,9 +73,20 @@ app.post('/signup', (req, res) => {
     }
   })
   .then(data => {
+    userId = data.user.uid;
     return data.user.getIdToken();
   })
   .then(token => {
+    const userCreds = {
+      handle: newUser.handle,
+      email: newUser.email,
+      createdAt: new Date().toISOString(),
+      userId
+    }
+    
+    return db.doc(`/users/${newUser.handle}`).set(userCreds);
+  })
+  .then(() => {
     return res.status(201).json({ token });
   })
   .catch(err => {
